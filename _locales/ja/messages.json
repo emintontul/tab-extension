@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "ドメインごとにタブを閉じる。どのサイトのタブが多いか確認し、ワンクリックですべて閉じます。"
+  },
+  "thisWindow": {
+    "message": "このウィンドウ"
+  },
+  "allWindows": {
+    "message": "すべて"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "tab": {
+    "message": "タブ"
+  },
+  "tabs": {
+    "message": "タブ"
+  },
+  "noTabs": {
+    "message": "開いているタブはありません"
+  }
+}

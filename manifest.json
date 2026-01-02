@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "CloseMyTabs",
+  "name": "__MSG_extName__",
   "version": "1.0.0",
-  "description": "Batch close tabs by domain. See which sites have the most tabs open and close them all with one click.",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "permissions": ["tabs"],
   "action": {
     "default_popup": "popup.html",

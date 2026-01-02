@@ -1,14 +1,18 @@
+// i18n helper
+const i18n = (key) => chrome.i18n.getMessage(key);
+
 document.addEventListener('DOMContentLoaded', async () => {
+  // Set localized labels
+  document.getElementById('label-this').textContent = i18n('thisWindow');
+  document.getElementById('label-all').textContent = i18n('allWindows');
+
   const tabListEl = document.getElementById('tab-list');
   const toggle = document.getElementById('all-windows-toggle');
 
-  // Mevcut pencereyi al
   const currentWindow = await chrome.windows.getCurrent();
 
-  // İlk yükleme
   await renderTabs(false);
 
-  // Toggle değişince yeniden render
   toggle.addEventListener('change', async () => {
     await renderTabs(toggle.checked);
   });
@@ -16,11 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function renderTabs(allWindows) {
     tabListEl.innerHTML = '';
 
-    // Tabları al
     const query = allWindows ? {} : { windowId: currentWindow.id };
     const tabs = await chrome.tabs.query(query);
 
-    // Domain'e göre grupla
     const grouped = {};
 
     tabs.forEach(tab => {
@@ -44,15 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    // Tab sayısına göre sırala (çoktan aza)
     const sorted = Object.entries(grouped).sort((a, b) => b[1].tabs.length - a[1].tabs.length);
 
     if (sorted.length === 0) {
-      tabListEl.innerHTML = '<div class="empty-message">Açık tab yok</div>';
+      tabListEl.innerHTML = `<div class="empty-message">${i18n('noTabs')}</div>`;
       return;
     }
 
-    // Her grup için HTML oluştur
     sorted.forEach(([domain, data]) => {
       const groupEl = document.createElement('div');
       groupEl.className = 'site-group';
@@ -76,11 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const countEl = document.createElement('div');
       countEl.className = 'site-count';
-      countEl.textContent = `${data.tabs.length} tab`;
+      const tabWord = data.tabs.length === 1 ? i18n('tab') : i18n('tabs');
+      countEl.textContent = `${data.tabs.length} ${tabWord}`;
 
       const closeAllBtn = document.createElement('button');
       closeAllBtn.className = 'close-all-btn';
-      closeAllBtn.textContent = 'Kapat';
+      closeAllBtn.textContent = i18n('close');
       closeAllBtn.onclick = async (e) => {
         e.stopPropagation();
         const tabIds = data.tabs.map(t => t.id);
@@ -95,7 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       headerEl.appendChild(infoEl);
       headerEl.appendChild(closeAllBtn);
 
-      // Expandable tab listesi
       const expandedEl = document.createElement('div');
       expandedEl.className = 'tab-list-expanded';
       expandedEl.style.display = 'none';
@@ -123,7 +123,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (remaining.length === 0) {
             groupEl.remove();
           } else {
-            countEl.textContent = `${remaining.length} tab`;
+            const newTabWord = remaining.length === 1 ? i18n('tab') : i18n('tabs');
+            countEl.textContent = `${remaining.length} ${newTabWord}`;
           }
         };
 
@@ -132,7 +133,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         expandedEl.appendChild(tabEl);
       });
 
-      // Header'a tıklayınca genişlet/daralt
       headerEl.onclick = (e) => {
         if (e.target === closeAllBtn) return;
         expandedEl.style.display = expandedEl.style.display === 'none' ? 'block' : 'none';

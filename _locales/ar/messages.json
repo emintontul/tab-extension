@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "أغلق علامات التبويب حسب النطاق. شاهد المواقع التي تحتوي على أكثر علامات تبويب وأغلقها جميعًا بنقرة واحدة."
+  },
+  "thisWindow": {
+    "message": "هذه النافذة"
+  },
+  "allWindows": {
+    "message": "الكل"
+  },
+  "close": {
+    "message": "إغلاق"
+  },
+  "tab": {
+    "message": "علامة تبويب"
+  },
+  "tabs": {
+    "message": "علامات تبويب"
+  },
+  "noTabs": {
+    "message": "لا توجد علامات تبويب مفتوحة"
+  }
+}

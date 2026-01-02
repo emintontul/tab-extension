@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Tabları toplu kapat. Hangi sitelerde en çok tab açık gör ve tek tıkla hepsini kapat."
+  },
+  "thisWindow": {
+    "message": "Bu pencere"
+  },
+  "allWindows": {
+    "message": "Tümü"
+  },
+  "close": {
+    "message": "Kapat"
+  },
+  "tab": {
+    "message": "tab"
+  },
+  "tabs": {
+    "message": "tab"
+  },
+  "noTabs": {
+    "message": "Açık tab yok"
+  }
+}

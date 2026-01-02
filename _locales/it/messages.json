@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Chiudi le schede per dominio. Vedi quali siti hanno più schede e chiudile tutte con un clic."
+  },
+  "thisWindow": {
+    "message": "Questa finestra"
+  },
+  "allWindows": {
+    "message": "Tutte"
+  },
+  "close": {
+    "message": "Chiudi"
+  },
+  "tab": {
+    "message": "scheda"
+  },
+  "tabs": {
+    "message": "schede"
+  },
+  "noTabs": {
+    "message": "Nessuna scheda aperta"
+  }
+}

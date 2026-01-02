@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Tabs nach Domain schließen. Sehen Sie, welche Seiten die meisten Tabs haben und schließen Sie alle mit einem Klick."
+  },
+  "thisWindow": {
+    "message": "Dieses Fenster"
+  },
+  "allWindows": {
+    "message": "Alle"
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "tab": {
+    "message": "Tab"
+  },
+  "tabs": {
+    "message": "Tabs"
+  },
+  "noTabs": {
+    "message": "Keine offenen Tabs"
+  }
+}

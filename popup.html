@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tab Manager</title>
+  <title>CloseMyTabs</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -11,12 +11,12 @@
     <div class="header">
       <h1>CloseMyTabs</h1>
       <div class="toggle-container">
-        <span class="toggle-label">Bu pencere</span>
+        <span class="toggle-label" id="label-this"></span>
         <label class="toggle">
           <input type="checkbox" id="all-windows-toggle">
           <span class="toggle-slider"></span>
         </label>
-        <span class="toggle-label">Tümü</span>
+        <span class="toggle-label" id="label-all"></span>
       </div>
     </div>
     <div id="tab-list"></div>

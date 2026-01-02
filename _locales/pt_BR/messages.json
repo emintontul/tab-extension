@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Feche abas por domínio. Veja quais sites têm mais abas e feche todas com um clique."
+  },
+  "thisWindow": {
+    "message": "Esta janela"
+  },
+  "allWindows": {
+    "message": "Todas"
+  },
+  "close": {
+    "message": "Fechar"
+  },
+  "tab": {
+    "message": "aba"
+  },
+  "tabs": {
+    "message": "abas"
+  },
+  "noTabs": {
+    "message": "Nenhuma aba aberta"
+  }
+}
