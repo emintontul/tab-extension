@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Tab Manager",
+  "name": "TabTidy - Tab Manager",
   "version": "1.0.0",
-  "description": "Manage and close multiple tabs by domain. View all open tabs grouped by website, sorted by count.",
+  "description": "Group and close tabs by domain. See which sites have the most open tabs and clean them up with one click.",
   "permissions": ["tabs"],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Tab Manager"
+    "default_title": "TabTidy"
   },
   "icons": {
     "16": "icons/icon16.png",
