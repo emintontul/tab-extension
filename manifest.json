@@ -1,11 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Tab Manager",
-  "version": "1.0",
-  "description": "Açık tabları grupla ve yönet",
+  "name": "CloseMyTabs",
+  "version": "1.0.0",
+  "description": "Batch close tabs by domain. See which sites have the most tabs open and close them all with one click.",
   "permissions": ["tabs"],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Tab Manager"
+    "default_title": "CloseMyTabs"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }
