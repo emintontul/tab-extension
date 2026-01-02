@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     tabListEl.innerHTML = '';
 
     const query = allWindows ? {} : { windowId: currentWindow.id };
-    const tabs = await chrome.tabs.query(query);
+    const allTabs = await chrome.tabs.query(query);
+
+    // Filter out pinned tabs
+    const tabs = allTabs.filter(tab => !tab.pinned);
 
     const grouped = {};
 
