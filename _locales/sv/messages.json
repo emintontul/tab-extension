@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Stäng flikar per domän. Se vilka webbplatser som har flest flikar och stäng alla med ett klick."
+  },
+  "thisWindow": {
+    "message": "Detta fönster"
+  },
+  "allWindows": {
+    "message": "Alla"
+  },
+  "close": {
+    "message": "Stäng"
+  },
+  "tab": {
+    "message": "flik"
+  },
+  "tabs": {
+    "message": "flikar"
+  },
+  "noTabs": {
+    "message": "Inga öppna flikar"
+  }
+}

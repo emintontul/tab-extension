@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Cierra pestañas por dominio. Mira qué sitios tienen más pestañas y ciérralas todas con un clic."
+  },
+  "thisWindow": {
+    "message": "Esta ventana"
+  },
+  "allWindows": {
+    "message": "Todas"
+  },
+  "close": {
+    "message": "Cerrar"
+  },
+  "tab": {
+    "message": "pestaña"
+  },
+  "tabs": {
+    "message": "pestañas"
+  },
+  "noTabs": {
+    "message": "No hay pestañas abiertas"
+  }
+}

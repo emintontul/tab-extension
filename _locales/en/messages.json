@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Batch close tabs by domain. See which sites have the most tabs open and close them all with one click."
+  },
+  "thisWindow": {
+    "message": "This window"
+  },
+  "allWindows": {
+    "message": "All"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "tab": {
+    "message": "tab"
+  },
+  "tabs": {
+    "message": "tabs"
+  },
+  "noTabs": {
+    "message": "No open tabs"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "도메인별로 탭을 닫습니다. 어떤 사이트에 탭이 가장 많은지 확인하고 한 번의 클릭으로 모두 닫으세요."
+  },
+  "thisWindow": {
+    "message": "이 창"
+  },
+  "allWindows": {
+    "message": "전체"
+  },
+  "close": {
+    "message": "닫기"
+  },
+  "tab": {
+    "message": "탭"
+  },
+  "tabs": {
+    "message": "탭"
+  },
+  "noTabs": {
+    "message": "열린 탭이 없습니다"
+  }
+}

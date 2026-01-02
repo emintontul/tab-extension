@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Zamykaj karty według domeny. Zobacz, które strony mają najwięcej kart i zamknij je wszystkie jednym kliknięciem."
+  },
+  "thisWindow": {
+    "message": "To okno"
+  },
+  "allWindows": {
+    "message": "Wszystkie"
+  },
+  "close": {
+    "message": "Zamknij"
+  },
+  "tab": {
+    "message": "karta"
+  },
+  "tabs": {
+    "message": "karty"
+  },
+  "noTabs": {
+    "message": "Brak otwartych kart"
+  }
+}

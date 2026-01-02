@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "按域名批量关闭标签页。查看哪些网站打开的标签页最多，一键全部关闭。"
+  },
+  "thisWindow": {
+    "message": "当前窗口"
+  },
+  "allWindows": {
+    "message": "全部"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "tab": {
+    "message": "标签页"
+  },
+  "tabs": {
+    "message": "标签页"
+  },
+  "noTabs": {
+    "message": "没有打开的标签页"
+  }
+}

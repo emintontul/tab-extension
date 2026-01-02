@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Fermez les onglets par domaine. Voyez quels sites ont le plus d'onglets et fermez-les tous en un clic."
+  },
+  "thisWindow": {
+    "message": "Cette fenêtre"
+  },
+  "allWindows": {
+    "message": "Tout"
+  },
+  "close": {
+    "message": "Fermer"
+  },
+  "tab": {
+    "message": "onglet"
+  },
+  "tabs": {
+    "message": "onglets"
+  },
+  "noTabs": {
+    "message": "Aucun onglet ouvert"
+  }
+}

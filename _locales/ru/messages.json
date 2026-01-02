@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Закрывайте вкладки по домену. Смотрите, на каких сайтах больше всего вкладок, и закрывайте их все одним кликом."
+  },
+  "thisWindow": {
+    "message": "Это окно"
+  },
+  "allWindows": {
+    "message": "Все"
+  },
+  "close": {
+    "message": "Закрыть"
+  },
+  "tab": {
+    "message": "вкладка"
+  },
+  "tabs": {
+    "message": "вкладок"
+  },
+  "noTabs": {
+    "message": "Нет открытых вкладок"
+  }
+}

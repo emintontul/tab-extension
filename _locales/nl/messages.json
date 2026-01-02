@@ -1,0 +1,26 @@
+{
+  "extName": {
+    "message": "CloseMyTabs"
+  },
+  "extDescription": {
+    "message": "Sluit tabbladen per domein. Bekijk welke sites de meeste tabbladen hebben en sluit ze allemaal met één klik."
+  },
+  "thisWindow": {
+    "message": "Dit venster"
+  },
+  "allWindows": {
+    "message": "Alle"
+  },
+  "close": {
+    "message": "Sluiten"
+  },
+  "tab": {
+    "message": "tabblad"
+  },
+  "tabs": {
+    "message": "tabbladen"
+  },
+  "noTabs": {
+    "message": "Geen geopende tabbladen"
+  }
+}
