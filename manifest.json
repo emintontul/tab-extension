@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "TabTidy - Tab Manager",
+  "name": "CloseMyTabs",
   "version": "1.0.0",
-  "description": "Group and close tabs by domain. See which sites have the most open tabs and clean them up with one click.",
+  "description": "Batch close tabs by domain. See which sites have the most tabs open and close them all with one click.",
   "permissions": ["tabs"],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "TabTidy"
+    "default_title": "CloseMyTabs"
   },
   "icons": {
     "16": "icons/icon16.png",

@@ -1,15 +1,15 @@
-# Privacy Policy for TabTidy
+# Privacy Policy for CloseMyTabs
 
 **Last updated: January 2, 2026**
 
 ## Overview
-TabTidy is a browser extension that helps you manage your open tabs. We are committed to protecting your privacy.
+CloseMyTabs is a browser extension that helps you batch close tabs by domain. We are committed to protecting your privacy.
 
 ## Data Collection
-**TabTidy does not collect, store, or transmit any personal data.**
+**CloseMyTabs does not collect, store, or transmit any personal data.**
 
 ### What we access:
-- **Tab information**: TabTidy reads your open tabs (URLs, titles, favicons) solely to display them in the extension popup. This information is processed locally in your browser and is never sent to any external server.
+- **Tab information**: CloseMyTabs reads your open tabs (URLs, titles, favicons) solely to display them in the extension popup. This information is processed locally in your browser and is never sent to any external server.
 
 ### What we DO NOT do:
 - We do not collect browsing history
