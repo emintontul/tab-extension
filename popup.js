@@ -7,29 +7,61 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('label-all').textContent = i18n('allWindows');
   document.getElementById('search-input').placeholder = i18n('search');
   document.getElementById('close-selected-btn').textContent = i18n('closeSelected');
+  document.getElementById('undo-title').textContent = i18n('recentlyClosed');
+  document.getElementById('sessions-title').textContent = i18n('sessions');
+  document.getElementById('session-name-input').placeholder = i18n('sessionName');
 
   const tabListEl = document.getElementById('tab-list');
   const toggle = document.getElementById('all-windows-toggle');
   const searchInput = document.getElementById('search-input');
   const themeToggle = document.getElementById('theme-toggle');
+  const settingsBtn = document.getElementById('settings-btn');
   const selectionBar = document.getElementById('selection-bar');
   const selectedCountEl = document.getElementById('selected-count');
   const closeSelectedBtn = document.getElementById('close-selected-btn');
+
+  // New elements
+  const duplicatesBtn = document.getElementById('duplicates-btn');
+  const copyUrlsBtn = document.getElementById('copy-urls-btn');
+  const undoBtn = document.getElementById('undo-btn');
+  const sessionsBtn = document.getElementById('sessions-btn');
+  const undoPanel = document.getElementById('undo-panel');
+  const undoList = document.getElementById('undo-list');
+  const sessionsPanel = document.getElementById('sessions-panel');
+  const sessionsList = document.getElementById('sessions-list');
+  const sessionNameInput = document.getElementById('session-name-input');
+  const saveSessionBtn = document.getElementById('save-session-btn');
+  const toast = document.getElementById('toast');
 
   // Get current window and active tab
   const currentWindow = await chrome.windows.getCurrent();
   const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const activeTabId = activeTab?.id;
 
+  // Load settings
+  const settings = await chrome.storage.sync.get({
+    protectCurrentTab: true,
+    darkMode: null
+  });
+
+  let protectCurrentTab = settings.protectCurrentTab;
+  let showDuplicatesOnly = false;
+  let allTabs = [];
+
   // Theme management
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (settings.darkMode === true || (settings.darkMode === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.body.classList.add('dark');
   }
 
-  themeToggle.addEventListener('click', () => {
+  themeToggle.addEventListener('click', async () => {
     document.body.classList.toggle('dark');
-    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    const isDark = document.body.classList.contains('dark');
+    await chrome.storage.sync.set({ darkMode: isDark });
+  });
+
+  // Settings button
+  settingsBtn.addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
   });
 
   // Track selected tabs
@@ -58,14 +90,197 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // ========== DUPLICATE FINDER ==========
+  duplicatesBtn.addEventListener('click', async () => {
+    showDuplicatesOnly = !showDuplicatesOnly;
+    duplicatesBtn.classList.toggle('active', showDuplicatesOnly);
+    await renderTabs(toggle.checked);
+  });
+
+  // ========== COPY ALL URLs ==========
+  copyUrlsBtn.addEventListener('click', async () => {
+    const query = toggle.checked ? {} : { windowId: currentWindow.id };
+    const tabs = await chrome.tabs.query(query);
+    const urls = tabs.filter(t => !t.pinned).map(t => t.url).join('\n');
+
+    await navigator.clipboard.writeText(urls);
+    showToast(i18n('urlsCopied'));
+  });
+
+  // ========== UNDO / RECENTLY CLOSED ==========
+  undoBtn.addEventListener('click', async () => {
+    sessionsPanel.classList.add('hidden');
+    undoPanel.classList.toggle('hidden');
+
+    if (!undoPanel.classList.contains('hidden')) {
+      await loadRecentlyClosed();
+    }
+  });
+
+  async function loadRecentlyClosed() {
+    undoList.innerHTML = '';
+
+    chrome.runtime.sendMessage({ action: 'getRecentlyClosed' }, (response) => {
+      if (!response || !response.tabs || response.tabs.length === 0) {
+        undoList.innerHTML = `<div class="panel-empty">${i18n('noRecentlyClosed')}</div>`;
+        return;
+      }
+
+      response.tabs.forEach(tab => {
+        const item = document.createElement('div');
+        item.className = 'panel-item';
+
+        const favicon = document.createElement('img');
+        favicon.className = 'panel-item-favicon';
+        favicon.src = tab.favIconUrl || getFallbackFavicon(new URL(tab.url).hostname);
+        favicon.onerror = () => {
+          favicon.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23666" width="100" height="100" rx="10"/></svg>';
+        };
+
+        const info = document.createElement('div');
+        info.className = 'panel-item-info';
+
+        const title = document.createElement('div');
+        title.className = 'panel-item-title';
+        title.textContent = tab.title || 'Untitled';
+
+        const url = document.createElement('div');
+        url.className = 'panel-item-url';
+        url.textContent = tab.url;
+
+        info.appendChild(title);
+        info.appendChild(url);
+
+        const restoreBtn = document.createElement('button');
+        restoreBtn.className = 'panel-item-btn';
+        restoreBtn.textContent = i18n('restore');
+        restoreBtn.onclick = (e) => {
+          e.stopPropagation();
+          chrome.runtime.sendMessage({ action: 'restoreTab', sessionId: tab.sessionId }, () => {
+            item.remove();
+            if (undoList.querySelectorAll('.panel-item').length === 0) {
+              undoList.innerHTML = `<div class="panel-empty">${i18n('noRecentlyClosed')}</div>`;
+            }
+          });
+        };
+
+        item.appendChild(favicon);
+        item.appendChild(info);
+        item.appendChild(restoreBtn);
+        undoList.appendChild(item);
+      });
+    });
+  }
+
+  // ========== SESSIONS ==========
+  sessionsBtn.addEventListener('click', async () => {
+    undoPanel.classList.add('hidden');
+    sessionsPanel.classList.toggle('hidden');
+
+    if (!sessionsPanel.classList.contains('hidden')) {
+      await loadSessions();
+    }
+  });
+
+  async function loadSessions() {
+    const { savedSessions = [] } = await chrome.storage.local.get('savedSessions');
+    sessionsList.innerHTML = '';
+
+    if (savedSessions.length === 0) {
+      sessionsList.innerHTML = `<div class="panel-empty">${i18n('noSavedSessions')}</div>`;
+      return;
+    }
+
+    savedSessions.forEach((session, index) => {
+      const item = document.createElement('div');
+      item.className = 'panel-item';
+
+      const info = document.createElement('div');
+      info.className = 'panel-item-info';
+
+      const title = document.createElement('div');
+      title.className = 'panel-item-title';
+      title.textContent = session.name;
+
+      const count = document.createElement('div');
+      count.className = 'panel-item-url';
+      count.textContent = `${session.tabs.length} ${session.tabs.length === 1 ? i18n('tab') : i18n('tabs')}`;
+
+      info.appendChild(title);
+      info.appendChild(count);
+
+      const restoreBtn = document.createElement('button');
+      restoreBtn.className = 'panel-item-btn';
+      restoreBtn.textContent = i18n('restoreSession');
+      restoreBtn.onclick = async (e) => {
+        e.stopPropagation();
+        for (const url of session.tabs) {
+          await chrome.tabs.create({ url, active: false });
+        }
+        showToast(`${session.name} restored`);
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'panel-item-btn delete';
+      deleteBtn.textContent = i18n('deleteSession');
+      deleteBtn.onclick = async (e) => {
+        e.stopPropagation();
+        savedSessions.splice(index, 1);
+        await chrome.storage.local.set({ savedSessions });
+        await loadSessions();
+      };
+
+      item.appendChild(info);
+      item.appendChild(restoreBtn);
+      item.appendChild(deleteBtn);
+      sessionsList.appendChild(item);
+    });
+  }
+
+  saveSessionBtn.addEventListener('click', async () => {
+    const name = sessionNameInput.value.trim() || `Session ${new Date().toLocaleString()}`;
+    const query = toggle.checked ? {} : { windowId: currentWindow.id };
+    const tabs = await chrome.tabs.query(query);
+    const urls = tabs.filter(t => !t.pinned).map(t => t.url);
+
+    const { savedSessions = [] } = await chrome.storage.local.get('savedSessions');
+    savedSessions.unshift({ name, tabs: urls, date: Date.now() });
+    await chrome.storage.local.set({ savedSessions });
+
+    sessionNameInput.value = '';
+    showToast(i18n('sessionSaved'));
+    await loadSessions();
+  });
+
+  // Panel close buttons
+  document.querySelectorAll('.panel-close').forEach(btn => {
+    btn.onclick = () => {
+      undoPanel.classList.add('hidden');
+      sessionsPanel.classList.add('hidden');
+    };
+  });
+
+  // Toast helper
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.classList.add('hidden'), 300);
+    }, 2000);
+  }
+
   // Close selected button
   closeSelectedBtn.addEventListener('click', async () => {
     if (selectedTabs.size === 0) return;
 
-    // Always exclude current tab from closing
-    selectedTabs.delete(activeTabId);
-    const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
-    if (checkbox) checkbox.checked = false;
+    // Exclude current tab if protected
+    if (protectCurrentTab) {
+      selectedTabs.delete(activeTabId);
+      const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
+      if (checkbox) checkbox.checked = false;
+    }
 
     if (selectedTabs.size === 0) {
       updateSelectionBar();
@@ -91,10 +306,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     tabListEl.innerHTML = '';
 
     const query = allWindows ? {} : { windowId: currentWindow.id };
-    const allTabs = await chrome.tabs.query(query);
+    allTabs = await chrome.tabs.query(query);
 
     // Filter out pinned tabs
-    const tabs = allTabs.filter(tab => !tab.pinned);
+    let tabs = allTabs.filter(tab => !tab.pinned);
+
+    // Find duplicates
+    const urlCount = {};
+    tabs.forEach(tab => {
+      urlCount[tab.url] = (urlCount[tab.url] || 0) + 1;
+    });
+    const duplicateUrls = new Set(Object.keys(urlCount).filter(url => urlCount[url] > 1));
+
+    // If showing duplicates only, filter
+    if (showDuplicatesOnly) {
+      tabs = tabs.filter(tab => duplicateUrls.has(tab.url));
+
+      if (tabs.length === 0) {
+        tabListEl.innerHTML = `<div class="empty-message">${i18n('noDuplicates')}</div>`;
+        return;
+      }
+    }
 
     const grouped = {};
 
@@ -109,13 +341,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             favicon: tab.favIconUrl || getFallbackFavicon(domain)
           };
         }
-        grouped[domain].tabs.push(tab);
+        grouped[domain].tabs.push({ ...tab, isDuplicate: duplicateUrls.has(tab.url) });
       } catch (e) {
         const domain = 'other';
         if (!grouped[domain]) {
           grouped[domain] = { tabs: [], favicon: null };
         }
-        grouped[domain].tabs.push(tab);
+        grouped[domain].tabs.push({ ...tab, isDuplicate: duplicateUrls.has(tab.url) });
       }
     });
 
@@ -153,14 +385,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tabWord = data.tabs.length === 1 ? i18n('tab') : i18n('tabs');
       countEl.textContent = `${data.tabs.length} ${tabWord}`;
 
-      // Filter out current tab from closeable tabs
-      const closeableTabs = data.tabs.filter(t => t.id !== activeTabId);
+      // Copy URLs button for this domain
+      const copyDomainBtn = document.createElement('button');
+      copyDomainBtn.className = 'copy-urls-btn';
+      copyDomainBtn.textContent = '⎘';
+      copyDomainBtn.title = i18n('copyUrls');
+      copyDomainBtn.onclick = async (e) => {
+        e.stopPropagation();
+        const urls = data.tabs.map(t => t.url).join('\n');
+        await navigator.clipboard.writeText(urls);
+        showToast(i18n('urlsCopied'));
+      };
+
+      // Filter out current tab from closeable tabs if protected
+      const closeableTabs = protectCurrentTab
+        ? data.tabs.filter(t => t.id !== activeTabId)
+        : data.tabs;
       const hasCurrentTab = data.tabs.some(t => t.id === activeTabId);
 
       const closeAllBtn = document.createElement('button');
       closeAllBtn.className = 'close-all-btn';
 
-      // If only current tab in group, hide close button
+      // If only current tab in group and protected, hide close button
       if (closeableTabs.length === 0) {
         closeAllBtn.style.display = 'none';
       } else {
@@ -170,16 +416,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       closeAllBtn.onclick = async (e) => {
         e.stopPropagation();
 
-        // Close all except current tab
         const tabIds = closeableTabs.map(t => t.id);
         if (tabIds.length === 0) return;
 
         await chrome.tabs.remove(tabIds);
 
-        // If current tab was in this group, keep the group with just current tab
-        if (hasCurrentTab) {
+        if (hasCurrentTab && protectCurrentTab) {
           countEl.textContent = `1 ${i18n('tab')}`;
-          // Remove closed tabs from expanded list
           expandedEl.querySelectorAll('.tab-item:not(.current-tab)').forEach(el => el.remove());
           closeAllBtn.style.display = 'none';
         } else {
@@ -192,6 +435,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       headerEl.appendChild(faviconEl);
       headerEl.appendChild(infoEl);
+      headerEl.appendChild(copyDomainBtn);
       headerEl.appendChild(closeAllBtn);
 
       const expandedEl = document.createElement('div');
@@ -203,8 +447,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         tabEl.className = 'tab-item';
 
         const isCurrentTab = tab.id === activeTabId;
+        const isProtected = isCurrentTab && protectCurrentTab;
+
         if (isCurrentTab) {
           tabEl.classList.add('current-tab');
+        }
+
+        if (tab.isDuplicate) {
+          tabEl.classList.add('duplicate');
         }
 
         const checkbox = document.createElement('input');
@@ -214,8 +464,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkbox.checked = selectedTabs.has(tab.id);
         checkbox.onclick = (e) => e.stopPropagation();
 
-        // Disable checkbox for current tab
-        if (isCurrentTab) {
+        // Disable checkbox for protected current tab
+        if (isProtected) {
           checkbox.disabled = true;
           checkbox.style.opacity = '0.3';
         }
@@ -242,14 +492,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         closeBtn.className = 'tab-close';
         closeBtn.textContent = '×';
 
-        // Hide close button for current tab
-        if (isCurrentTab) {
+        // Hide close button for protected current tab
+        if (isProtected) {
           closeBtn.style.visibility = 'hidden';
         }
 
         closeBtn.onclick = async (e) => {
           e.stopPropagation();
-          if (isCurrentTab) return; // Extra safety
+          if (isProtected) return;
 
           await chrome.tabs.remove(tab.id);
           selectedTabs.delete(tab.id);
@@ -261,8 +511,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           } else {
             const newTabWord = remaining.length === 1 ? i18n('tab') : i18n('tabs');
             countEl.textContent = `${remaining.length} ${newTabWord}`;
-            // Hide group close button if only current tab remains
-            if (remaining.length === 1 && remaining[0].classList.contains('current-tab')) {
+            if (remaining.length === 1 && remaining[0].classList.contains('current-tab') && protectCurrentTab) {
               closeAllBtn.style.display = 'none';
             }
           }
@@ -279,12 +528,19 @@ document.addEventListener('DOMContentLoaded', async () => {
           tabEl.appendChild(badge);
         }
 
+        if (tab.isDuplicate && !isCurrentTab) {
+          const dupBadge = document.createElement('span');
+          dupBadge.className = 'duplicate-badge';
+          dupBadge.textContent = i18n('duplicate');
+          tabEl.appendChild(dupBadge);
+        }
+
         tabEl.appendChild(closeBtn);
         expandedEl.appendChild(tabEl);
       });
 
       headerEl.onclick = (e) => {
-        if (e.target === closeAllBtn) return;
+        if (e.target === closeAllBtn || e.target === copyDomainBtn) return;
         expandedEl.style.display = expandedEl.style.display === 'none' ? 'block' : 'none';
       };
 

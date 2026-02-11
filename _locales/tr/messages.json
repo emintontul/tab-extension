@@ -1,44 +1,38 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Tabları toplu kapat. Hangi sitelerde en çok tab açık gör ve tek tıkla hepsini kapat."
-  },
-  "thisWindow": {
-    "message": "Bu pencere"
-  },
-  "allWindows": {
-    "message": "Tümü"
-  },
-  "close": {
-    "message": "Kapat"
-  },
-  "tab": {
-    "message": "sekme"
-  },
-  "tabs": {
-    "message": "sekme"
-  },
-  "noTabs": {
-    "message": "Açık sekme yok"
-  },
-  "search": {
-    "message": "Ara..."
-  },
-  "closeSelected": {
-    "message": "Seçilenleri kapat"
-  },
-  "selectedCount": {
-    "message": "{count} seçili"
-  },
-  "current": {
-    "message": "mevcut"
-  },
-  "confirmCloseCurrent": {
-    "message": "Bu mevcut sekmeniz. Kapatmak istediğinize emin misiniz?"
-  },
-  "confirmCloseOnly": {
-    "message": "Bu tek sekme. Emin misiniz?"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Tabları toplu kapat. Hangi sitelerde en çok tab açık gör ve tek tıkla hepsini kapat." },
+  "thisWindow": { "message": "Bu pencere" },
+  "allWindows": { "message": "Tümü" },
+  "close": { "message": "Kapat" },
+  "tab": { "message": "sekme" },
+  "tabs": { "message": "sekme" },
+  "noTabs": { "message": "Açık sekme yok" },
+  "search": { "message": "Ara..." },
+  "closeSelected": { "message": "Seçilenleri kapat" },
+  "selectedCount": { "message": "{count} seçili" },
+  "current": { "message": "mevcut" },
+  "confirmCloseCurrent": { "message": "Bu mevcut sekmeniz. Kapatmak istediğinize emin misiniz?" },
+  "confirmCloseOnly": { "message": "Bu tek sekme. Emin misiniz?" },
+  "settingsTitle": { "message": "Ayarlar" },
+  "protectCurrentTitle": { "message": "Mevcut sekmeyi koru" },
+  "protectCurrentDesc": { "message": "Şu an görüntülediğiniz sekmeyi asla kapatma" },
+  "darkModeTitle": { "message": "Karanlık mod" },
+  "darkModeDesc": { "message": "Karanlık tema kullan" },
+  "settingsSaved": { "message": "Ayarlar kaydedildi" },
+  "duplicates": { "message": "Kopyalar" },
+  "duplicate": { "message": "kopya" },
+  "noDuplicates": { "message": "Kopya sekme yok" },
+  "copyUrls": { "message": "URL'leri kopyala" },
+  "urlsCopied": { "message": "URL'ler kopyalandı!" },
+  "undo": { "message": "Geri al" },
+  "recentlyClosed": { "message": "Son kapatılanlar" },
+  "noRecentlyClosed": { "message": "Son kapatılan sekme yok" },
+  "restore": { "message": "Geri yükle" },
+  "sessions": { "message": "Oturumlar" },
+  "saveSession": { "message": "Oturumu kaydet" },
+  "sessionName": { "message": "Oturum adı" },
+  "noSavedSessions": { "message": "Kayıtlı oturum yok" },
+  "sessionSaved": { "message": "Oturum kaydedildi!" },
+  "deleteSession": { "message": "Sil" },
+  "restoreSession": { "message": "Geri yükle" }
 }
