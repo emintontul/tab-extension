@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Sluit tabbladen per domein. Bekijk welke sites de meeste tabbladen hebben en sluit ze allemaal met één klik."
-  },
-  "thisWindow": {
-    "message": "Dit venster"
-  },
-  "allWindows": {
-    "message": "Alle"
-  },
-  "close": {
-    "message": "Sluiten"
-  },
-  "tab": {
-    "message": "tabblad"
-  },
-  "tabs": {
-    "message": "tabbladen"
-  },
-  "noTabs": {
-    "message": "Geen geopende tabbladen"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Sluit tabbladen per domein. Bekijk welke sites de meeste tabbladen hebben en sluit ze allemaal met één klik." },
+  "thisWindow": { "message": "Dit venster" },
+  "allWindows": { "message": "Alle" },
+  "close": { "message": "Sluiten" },
+  "tab": { "message": "tabblad" },
+  "tabs": { "message": "tabbladen" },
+  "noTabs": { "message": "Geen geopende tabbladen" },
+  "search": { "message": "Zoeken..." },
+  "closeSelected": { "message": "Selectie sluiten" },
+  "selectedCount": { "message": "{count} geselecteerd" },
+  "current": { "message": "huidig" },
+  "confirmCloseCurrent": { "message": "Dit is uw huidige tabblad. Weet u het zeker?" },
+  "confirmCloseOnly": { "message": "Dit is het enige tabblad. Weet u het zeker?" }
 }

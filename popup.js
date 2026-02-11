@@ -5,17 +5,89 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Set localized labels
   document.getElementById('label-this').textContent = i18n('thisWindow');
   document.getElementById('label-all').textContent = i18n('allWindows');
+  document.getElementById('search-input').placeholder = i18n('search');
+  document.getElementById('close-selected-btn').textContent = i18n('closeSelected');
 
   const tabListEl = document.getElementById('tab-list');
   const toggle = document.getElementById('all-windows-toggle');
+  const searchInput = document.getElementById('search-input');
+  const themeToggle = document.getElementById('theme-toggle');
+  const selectionBar = document.getElementById('selection-bar');
+  const selectedCountEl = document.getElementById('selected-count');
+  const closeSelectedBtn = document.getElementById('close-selected-btn');
 
+  // Get current window and active tab
   const currentWindow = await chrome.windows.getCurrent();
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const activeTabId = activeTab?.id;
 
+  // Theme management
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  // Track selected tabs
+  let selectedTabs = new Set();
+
+  // Initial render
   await renderTabs(false);
 
+  // Toggle change
   toggle.addEventListener('change', async () => {
+    selectedTabs.clear();
+    updateSelectionBar();
     await renderTabs(toggle.checked);
   });
+
+  // Search functionality
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    const groups = tabListEl.querySelectorAll('.site-group');
+
+    groups.forEach(group => {
+      const domain = group.dataset.domain.toLowerCase();
+      const tabTitles = Array.from(group.querySelectorAll('.tab-title')).map(el => el.textContent.toLowerCase());
+      const matches = domain.includes(query) || tabTitles.some(title => title.includes(query));
+      group.classList.toggle('hidden', !matches);
+    });
+  });
+
+  // Close selected button
+  closeSelectedBtn.addEventListener('click', async () => {
+    if (selectedTabs.size === 0) return;
+
+    // Check if trying to close active tab
+    if (selectedTabs.has(activeTabId)) {
+      const confirmed = confirm(i18n('confirmCloseCurrent'));
+      if (!confirmed) {
+        selectedTabs.delete(activeTabId);
+        updateSelectionBar();
+        const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
+        if (checkbox) checkbox.checked = false;
+        return;
+      }
+    }
+
+    await chrome.tabs.remove([...selectedTabs]);
+    selectedTabs.clear();
+    updateSelectionBar();
+    await renderTabs(toggle.checked);
+  });
+
+  function updateSelectionBar() {
+    if (selectedTabs.size > 0) {
+      selectionBar.classList.remove('hidden');
+      selectedCountEl.textContent = i18n('selectedCount').replace('{count}', selectedTabs.size);
+    } else {
+      selectionBar.classList.add('hidden');
+    }
+  }
 
   async function renderTabs(allWindows) {
     tabListEl.innerHTML = '';
@@ -59,6 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     sorted.forEach(([domain, data]) => {
       const groupEl = document.createElement('div');
       groupEl.className = 'site-group';
+      groupEl.dataset.domain = domain;
 
       const headerEl = document.createElement('div');
       headerEl.className = 'site-header';
@@ -87,6 +160,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       closeAllBtn.textContent = i18n('close');
       closeAllBtn.onclick = async (e) => {
         e.stopPropagation();
+
+        // Check if this is the only tab group or contains active tab
+        const hasActiveTab = data.tabs.some(t => t.id === activeTabId);
+        const isLastGroup = sorted.length === 1;
+
+        if (data.tabs.length === 1 || isLastGroup || hasActiveTab) {
+          const msg = hasActiveTab ? i18n('confirmCloseCurrent') : i18n('confirmCloseOnly');
+          if (!confirm(msg)) return;
+        }
+
         const tabIds = data.tabs.map(t => t.id);
         await chrome.tabs.remove(tabIds);
         groupEl.remove();
@@ -107,6 +190,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         const tabEl = document.createElement('div');
         tabEl.className = 'tab-item';
 
+        const isCurrentTab = tab.id === activeTabId;
+        if (isCurrentTab) {
+          tabEl.classList.add('current-tab');
+        }
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'tab-checkbox';
+        checkbox.dataset.tabId = tab.id;
+        checkbox.checked = selectedTabs.has(tab.id);
+        checkbox.onclick = (e) => e.stopPropagation();
+        checkbox.onchange = () => {
+          if (checkbox.checked) {
+            selectedTabs.add(tab.id);
+          } else {
+            selectedTabs.delete(tab.id);
+          }
+          updateSelectionBar();
+        };
+
         const titleEl = document.createElement('span');
         titleEl.className = 'tab-title';
         titleEl.textContent = tab.title || 'Untitled';
@@ -119,9 +222,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const closeBtn = document.createElement('button');
         closeBtn.className = 'tab-close';
         closeBtn.textContent = '×';
-        closeBtn.onclick = async () => {
+        closeBtn.onclick = async (e) => {
+          e.stopPropagation();
+
+          // Warn if current tab or only tab
+          if (isCurrentTab) {
+            if (!confirm(i18n('confirmCloseCurrent'))) return;
+          }
+
           await chrome.tabs.remove(tab.id);
+          selectedTabs.delete(tab.id);
           tabEl.remove();
+
           const remaining = expandedEl.querySelectorAll('.tab-item');
           if (remaining.length === 0) {
             groupEl.remove();
@@ -129,9 +241,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             const newTabWord = remaining.length === 1 ? i18n('tab') : i18n('tabs');
             countEl.textContent = `${remaining.length} ${newTabWord}`;
           }
+          updateSelectionBar();
         };
 
+        tabEl.appendChild(checkbox);
         tabEl.appendChild(titleEl);
+
+        if (isCurrentTab) {
+          const badge = document.createElement('span');
+          badge.className = 'current-badge';
+          badge.textContent = i18n('current');
+          tabEl.appendChild(badge);
+        }
+
         tabEl.appendChild(closeBtn);
         expandedEl.appendChild(tabEl);
       });

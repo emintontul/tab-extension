@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Tabs nach Domain schließen. Sehen Sie, welche Seiten die meisten Tabs haben und schließen Sie alle mit einem Klick."
-  },
-  "thisWindow": {
-    "message": "Dieses Fenster"
-  },
-  "allWindows": {
-    "message": "Alle"
-  },
-  "close": {
-    "message": "Schließen"
-  },
-  "tab": {
-    "message": "Tab"
-  },
-  "tabs": {
-    "message": "Tabs"
-  },
-  "noTabs": {
-    "message": "Keine offenen Tabs"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Tabs nach Domain schließen. Sehen Sie, welche Seiten die meisten Tabs haben und schließen Sie alle mit einem Klick." },
+  "thisWindow": { "message": "Dieses Fenster" },
+  "allWindows": { "message": "Alle" },
+  "close": { "message": "Schließen" },
+  "tab": { "message": "Tab" },
+  "tabs": { "message": "Tabs" },
+  "noTabs": { "message": "Keine offenen Tabs" },
+  "search": { "message": "Suchen..." },
+  "closeSelected": { "message": "Ausgewählte schließen" },
+  "selectedCount": { "message": "{count} ausgewählt" },
+  "current": { "message": "aktuell" },
+  "confirmCloseCurrent": { "message": "Dies ist Ihr aktueller Tab. Sind Sie sicher?" },
+  "confirmCloseOnly": { "message": "Dies ist der einzige Tab. Sind Sie sicher?" }
 }

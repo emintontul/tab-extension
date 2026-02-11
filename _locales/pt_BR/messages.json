@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Feche abas por domínio. Veja quais sites têm mais abas e feche todas com um clique."
-  },
-  "thisWindow": {
-    "message": "Esta janela"
-  },
-  "allWindows": {
-    "message": "Todas"
-  },
-  "close": {
-    "message": "Fechar"
-  },
-  "tab": {
-    "message": "aba"
-  },
-  "tabs": {
-    "message": "abas"
-  },
-  "noTabs": {
-    "message": "Nenhuma aba aberta"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Feche abas por domínio. Veja quais sites têm mais abas e feche todas com um clique." },
+  "thisWindow": { "message": "Esta janela" },
+  "allWindows": { "message": "Todas" },
+  "close": { "message": "Fechar" },
+  "tab": { "message": "aba" },
+  "tabs": { "message": "abas" },
+  "noTabs": { "message": "Nenhuma aba aberta" },
+  "search": { "message": "Buscar..." },
+  "closeSelected": { "message": "Fechar selecionadas" },
+  "selectedCount": { "message": "{count} selecionada(s)" },
+  "current": { "message": "atual" },
+  "confirmCloseCurrent": { "message": "Esta é sua aba atual. Tem certeza?" },
+  "confirmCloseOnly": { "message": "Esta é a única aba. Tem certeza?" }
 }

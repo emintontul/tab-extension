@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Fermez les onglets par domaine. Voyez quels sites ont le plus d'onglets et fermez-les tous en un clic."
-  },
-  "thisWindow": {
-    "message": "Cette fenêtre"
-  },
-  "allWindows": {
-    "message": "Tout"
-  },
-  "close": {
-    "message": "Fermer"
-  },
-  "tab": {
-    "message": "onglet"
-  },
-  "tabs": {
-    "message": "onglets"
-  },
-  "noTabs": {
-    "message": "Aucun onglet ouvert"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Fermez les onglets par domaine. Voyez quels sites ont le plus d'onglets et fermez-les tous en un clic." },
+  "thisWindow": { "message": "Cette fenêtre" },
+  "allWindows": { "message": "Tout" },
+  "close": { "message": "Fermer" },
+  "tab": { "message": "onglet" },
+  "tabs": { "message": "onglets" },
+  "noTabs": { "message": "Aucun onglet ouvert" },
+  "search": { "message": "Rechercher..." },
+  "closeSelected": { "message": "Fermer la sélection" },
+  "selectedCount": { "message": "{count} sélectionné(s)" },
+  "current": { "message": "actuel" },
+  "confirmCloseCurrent": { "message": "C'est votre onglet actuel. Êtes-vous sûr?" },
+  "confirmCloseOnly": { "message": "C'est le seul onglet. Êtes-vous sûr?" }
 }
