@@ -26,7 +26,32 @@
     <div class="search-container">
       <input type="text" id="search-input" placeholder="Search...">
     </div>
+    <div class="toolbar">
+      <button id="duplicates-btn" class="toolbar-btn" title="Find duplicates">⊘</button>
+      <button id="copy-urls-btn" class="toolbar-btn" title="Copy all URLs">⎘</button>
+      <button id="undo-btn" class="toolbar-btn" title="Recently closed">↺</button>
+      <button id="sessions-btn" class="toolbar-btn" title="Sessions">☰</button>
+    </div>
     <div id="tab-list"></div>
+    <div id="undo-panel" class="panel hidden">
+      <div class="panel-header">
+        <span id="undo-title"></span>
+        <button class="panel-close">×</button>
+      </div>
+      <div id="undo-list" class="panel-list"></div>
+    </div>
+    <div id="sessions-panel" class="panel hidden">
+      <div class="panel-header">
+        <span id="sessions-title"></span>
+        <button class="panel-close">×</button>
+      </div>
+      <div class="session-save">
+        <input type="text" id="session-name-input" placeholder="Session name">
+        <button id="save-session-btn">💾</button>
+      </div>
+      <div id="sessions-list" class="panel-list"></div>
+    </div>
+    <div id="toast" class="toast hidden"></div>
     <div id="selection-bar" class="selection-bar hidden">
       <span id="selected-count"></span>
       <button id="close-selected-btn" class="close-selected-btn"></button>

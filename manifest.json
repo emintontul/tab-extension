@@ -4,14 +4,26 @@
   "version": "1.0.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
-  "permissions": ["tabs", "storage"],
+  "permissions": ["tabs", "storage", "sessions"],
   "action": {
     "default_popup": "popup.html",
     "default_title": "CloseMyTabs"
   },
+  "background": {
+    "service_worker": "background.js"
+  },
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+T",
+        "mac": "Alt+T"
+      },
+      "description": "Open CloseMyTabs"
+    }
   },
   "icons": {
     "16": "icons/icon16.png",

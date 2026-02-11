@@ -18,5 +18,21 @@
   "protectCurrentDesc": { "message": "Never close the tab you're currently viewing" },
   "darkModeTitle": { "message": "Dark mode" },
   "darkModeDesc": { "message": "Use dark theme" },
-  "settingsSaved": { "message": "Settings saved" }
+  "settingsSaved": { "message": "Settings saved" },
+  "duplicates": { "message": "Duplicates" },
+  "duplicate": { "message": "duplicate" },
+  "noDuplicates": { "message": "No duplicate tabs" },
+  "copyUrls": { "message": "Copy URLs" },
+  "urlsCopied": { "message": "URLs copied!" },
+  "undo": { "message": "Undo" },
+  "recentlyClosed": { "message": "Recently closed" },
+  "noRecentlyClosed": { "message": "No recently closed tabs" },
+  "restore": { "message": "Restore" },
+  "sessions": { "message": "Sessions" },
+  "saveSession": { "message": "Save session" },
+  "sessionName": { "message": "Session name" },
+  "noSavedSessions": { "message": "No saved sessions" },
+  "sessionSaved": { "message": "Session saved!" },
+  "deleteSession": { "message": "Delete" },
+  "restoreSession": { "message": "Restore" }
 }
