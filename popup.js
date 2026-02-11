@@ -62,16 +62,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   closeSelectedBtn.addEventListener('click', async () => {
     if (selectedTabs.size === 0) return;
 
-    // Check if trying to close active tab
-    if (selectedTabs.has(activeTabId)) {
-      const confirmed = confirm(i18n('confirmCloseCurrent'));
-      if (!confirmed) {
-        selectedTabs.delete(activeTabId);
-        updateSelectionBar();
-        const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
-        if (checkbox) checkbox.checked = false;
-        return;
-      }
+    // Always exclude current tab from closing
+    selectedTabs.delete(activeTabId);
+    const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
+    if (checkbox) checkbox.checked = false;
+
+    if (selectedTabs.size === 0) {
+      updateSelectionBar();
+      return;
     }
 
     await chrome.tabs.remove([...selectedTabs]);
@@ -155,24 +153,38 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tabWord = data.tabs.length === 1 ? i18n('tab') : i18n('tabs');
       countEl.textContent = `${data.tabs.length} ${tabWord}`;
 
+      // Filter out current tab from closeable tabs
+      const closeableTabs = data.tabs.filter(t => t.id !== activeTabId);
+      const hasCurrentTab = data.tabs.some(t => t.id === activeTabId);
+
       const closeAllBtn = document.createElement('button');
       closeAllBtn.className = 'close-all-btn';
-      closeAllBtn.textContent = i18n('close');
+
+      // If only current tab in group, hide close button
+      if (closeableTabs.length === 0) {
+        closeAllBtn.style.display = 'none';
+      } else {
+        closeAllBtn.textContent = i18n('close');
+      }
+
       closeAllBtn.onclick = async (e) => {
         e.stopPropagation();
 
-        // Check if this is the only tab group or contains active tab
-        const hasActiveTab = data.tabs.some(t => t.id === activeTabId);
-        const isLastGroup = sorted.length === 1;
+        // Close all except current tab
+        const tabIds = closeableTabs.map(t => t.id);
+        if (tabIds.length === 0) return;
 
-        if (data.tabs.length === 1 || isLastGroup || hasActiveTab) {
-          const msg = hasActiveTab ? i18n('confirmCloseCurrent') : i18n('confirmCloseOnly');
-          if (!confirm(msg)) return;
-        }
-
-        const tabIds = data.tabs.map(t => t.id);
         await chrome.tabs.remove(tabIds);
-        groupEl.remove();
+
+        // If current tab was in this group, keep the group with just current tab
+        if (hasCurrentTab) {
+          countEl.textContent = `1 ${i18n('tab')}`;
+          // Remove closed tabs from expanded list
+          expandedEl.querySelectorAll('.tab-item:not(.current-tab)').forEach(el => el.remove());
+          closeAllBtn.style.display = 'none';
+        } else {
+          groupEl.remove();
+        }
       };
 
       infoEl.appendChild(domainEl);
@@ -201,6 +213,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkbox.dataset.tabId = tab.id;
         checkbox.checked = selectedTabs.has(tab.id);
         checkbox.onclick = (e) => e.stopPropagation();
+
+        // Disable checkbox for current tab
+        if (isCurrentTab) {
+          checkbox.disabled = true;
+          checkbox.style.opacity = '0.3';
+        }
+
         checkbox.onchange = () => {
           if (checkbox.checked) {
             selectedTabs.add(tab.id);
@@ -222,13 +241,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const closeBtn = document.createElement('button');
         closeBtn.className = 'tab-close';
         closeBtn.textContent = '×';
+
+        // Hide close button for current tab
+        if (isCurrentTab) {
+          closeBtn.style.visibility = 'hidden';
+        }
+
         closeBtn.onclick = async (e) => {
           e.stopPropagation();
-
-          // Warn if current tab or only tab
-          if (isCurrentTab) {
-            if (!confirm(i18n('confirmCloseCurrent'))) return;
-          }
+          if (isCurrentTab) return; // Extra safety
 
           await chrome.tabs.remove(tab.id);
           selectedTabs.delete(tab.id);
@@ -240,6 +261,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           } else {
             const newTabWord = remaining.length === 1 ? i18n('tab') : i18n('tabs');
             countEl.textContent = `${remaining.length} ${newTabWord}`;
+            // Hide group close button if only current tab remains
+            if (remaining.length === 1 && remaining[0].classList.contains('current-tab')) {
+              closeAllBtn.style.display = 'none';
+            }
           }
           updateSelectionBar();
         };
