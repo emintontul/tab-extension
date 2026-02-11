@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('sessions-title').textContent = i18n('sessions');
   document.getElementById('session-name-input').placeholder = i18n('sessionName');
   document.getElementById('label-duplicates').textContent = i18n('duplicates');
-  document.getElementById('label-copy').textContent = i18n('copy');
   document.getElementById('label-undo').textContent = i18n('undo');
   document.getElementById('label-sessions').textContent = i18n('sessions');
 
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // New elements
   const duplicatesBtn = document.getElementById('duplicates-btn');
-  const copyUrlsBtn = document.getElementById('copy-urls-btn');
   const undoBtn = document.getElementById('undo-btn');
   const sessionsBtn = document.getElementById('sessions-btn');
   const undoPanel = document.getElementById('undo-panel');
@@ -99,16 +97,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     showDuplicatesOnly = !showDuplicatesOnly;
     duplicatesBtn.classList.toggle('active', showDuplicatesOnly);
     await renderTabs(toggle.checked);
-  });
-
-  // ========== COPY ALL URLs ==========
-  copyUrlsBtn.addEventListener('click', async () => {
-    const query = toggle.checked ? {} : { windowId: currentWindow.id };
-    const tabs = await chrome.tabs.query(query);
-    const urls = tabs.filter(t => !t.pinned).map(t => t.url).join('\n');
-
-    await navigator.clipboard.writeText(urls);
-    showToast(i18n('urlsCopied'));
   });
 
   // ========== UNDO / RECENTLY CLOSED ==========
