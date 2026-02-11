@@ -20,6 +20,7 @@
   "darkModeDesc": { "message": "Use dark theme" },
   "settingsSaved": { "message": "Settings saved" },
   "duplicates": { "message": "Duplicates" },
+  "copy": { "message": "Copy" },
   "duplicate": { "message": "duplicate" },
   "noDuplicates": { "message": "No duplicate tabs" },
   "copyUrls": { "message": "Copy URLs" },

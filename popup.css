@@ -177,11 +177,24 @@ h1 {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 8px;
+  padding: 6px 4px;
   font-size: 14px;
   cursor: pointer;
   color: var(--text-secondary);
   transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.toolbar-icon {
+  font-size: 16px;
+}
+
+.toolbar-label {
+  font-size: 9px;
+  font-weight: 500;
 }
 
 .toolbar-btn:hover {
@@ -620,20 +633,13 @@ h1 {
 }
 
 /* Copy button in header */
-.copy-urls-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font-size: 12px;
-  padding: 4px 8px;
-  margin-left: auto;
-  margin-right: 8px;
-  border-radius: 6px;
-  transition: all 0.15s;
-}
-
-.copy-urls-btn:hover {
-  background: var(--bg-hover);
-  color: var(--accent);
+/* Session icon */
+.session-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }

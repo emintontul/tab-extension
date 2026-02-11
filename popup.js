@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('undo-title').textContent = i18n('recentlyClosed');
   document.getElementById('sessions-title').textContent = i18n('sessions');
   document.getElementById('session-name-input').placeholder = i18n('sessionName');
+  document.getElementById('label-duplicates').textContent = i18n('duplicates');
+  document.getElementById('label-copy').textContent = i18n('copy');
+  document.getElementById('label-undo').textContent = i18n('undo');
+  document.getElementById('label-sessions').textContent = i18n('sessions');
 
   const tabListEl = document.getElementById('tab-list');
   const toggle = document.getElementById('all-windows-toggle');
@@ -192,26 +196,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     savedSessions.forEach((session, index) => {
-      const item = document.createElement('div');
-      item.className = 'panel-item';
+      const groupEl = document.createElement('div');
+      groupEl.className = 'site-group';
 
-      const info = document.createElement('div');
-      info.className = 'panel-item-info';
+      const headerEl = document.createElement('div');
+      headerEl.className = 'site-header';
 
-      const title = document.createElement('div');
-      title.className = 'panel-item-title';
-      title.textContent = session.name;
+      // Session icon
+      const iconEl = document.createElement('div');
+      iconEl.className = 'session-icon';
+      iconEl.textContent = '📁';
 
-      const count = document.createElement('div');
-      count.className = 'panel-item-url';
-      count.textContent = `${session.tabs.length} ${session.tabs.length === 1 ? i18n('tab') : i18n('tabs')}`;
+      const infoEl = document.createElement('div');
+      infoEl.className = 'site-info';
 
-      info.appendChild(title);
-      info.appendChild(count);
+      const nameEl = document.createElement('div');
+      nameEl.className = 'site-domain';
+      nameEl.textContent = session.name;
+
+      const countEl = document.createElement('div');
+      countEl.className = 'site-count';
+      countEl.textContent = `${session.tabs.length} ${session.tabs.length === 1 ? i18n('tab') : i18n('tabs')}`;
+
+      infoEl.appendChild(nameEl);
+      infoEl.appendChild(countEl);
 
       const restoreBtn = document.createElement('button');
-      restoreBtn.className = 'panel-item-btn';
-      restoreBtn.textContent = i18n('restoreSession');
+      restoreBtn.className = 'close-all-btn';
+      restoreBtn.style.background = 'var(--accent)';
+      restoreBtn.textContent = i18n('restore');
       restoreBtn.onclick = async (e) => {
         e.stopPropagation();
         for (const url of session.tabs) {
@@ -221,8 +234,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       };
 
       const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'panel-item-btn delete';
-      deleteBtn.textContent = i18n('deleteSession');
+      deleteBtn.className = 'close-all-btn';
+      deleteBtn.style.marginLeft = '6px';
+      deleteBtn.textContent = '×';
       deleteBtn.onclick = async (e) => {
         e.stopPropagation();
         savedSessions.splice(index, 1);
@@ -230,10 +244,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadSessions();
       };
 
-      item.appendChild(info);
-      item.appendChild(restoreBtn);
-      item.appendChild(deleteBtn);
-      sessionsList.appendChild(item);
+      headerEl.appendChild(iconEl);
+      headerEl.appendChild(infoEl);
+      headerEl.appendChild(restoreBtn);
+      headerEl.appendChild(deleteBtn);
+
+      // Expanded list showing URLs
+      const expandedEl = document.createElement('div');
+      expandedEl.className = 'tab-list-expanded';
+      expandedEl.style.display = 'none';
+
+      session.tabs.forEach(url => {
+        const tabEl = document.createElement('div');
+        tabEl.className = 'tab-item';
+
+        let domain = 'unknown';
+        try {
+          domain = new URL(url).hostname.replace('www.', '');
+        } catch (e) {}
+
+        const titleEl = document.createElement('span');
+        titleEl.className = 'tab-title';
+        titleEl.textContent = domain;
+        titleEl.title = url;
+
+        tabEl.appendChild(titleEl);
+        expandedEl.appendChild(tabEl);
+      });
+
+      headerEl.onclick = (e) => {
+        if (e.target === restoreBtn || e.target === deleteBtn) return;
+        expandedEl.style.display = expandedEl.style.display === 'none' ? 'block' : 'none';
+      };
+
+      groupEl.appendChild(headerEl);
+      groupEl.appendChild(expandedEl);
+      sessionsList.appendChild(groupEl);
     });
   }
 
@@ -385,18 +431,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tabWord = data.tabs.length === 1 ? i18n('tab') : i18n('tabs');
       countEl.textContent = `${data.tabs.length} ${tabWord}`;
 
-      // Copy URLs button for this domain
-      const copyDomainBtn = document.createElement('button');
-      copyDomainBtn.className = 'copy-urls-btn';
-      copyDomainBtn.textContent = '⎘';
-      copyDomainBtn.title = i18n('copyUrls');
-      copyDomainBtn.onclick = async (e) => {
-        e.stopPropagation();
-        const urls = data.tabs.map(t => t.url).join('\n');
-        await navigator.clipboard.writeText(urls);
-        showToast(i18n('urlsCopied'));
-      };
-
       // Filter out current tab from closeable tabs if protected
       const closeableTabs = protectCurrentTab
         ? data.tabs.filter(t => t.id !== activeTabId)
@@ -435,7 +469,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       headerEl.appendChild(faviconEl);
       headerEl.appendChild(infoEl);
-      headerEl.appendChild(copyDomainBtn);
       headerEl.appendChild(closeAllBtn);
 
       const expandedEl = document.createElement('div');
@@ -540,7 +573,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       headerEl.onclick = (e) => {
-        if (e.target === closeAllBtn || e.target === copyDomainBtn) return;
+        if (e.target === closeAllBtn) return;
         expandedEl.style.display = expandedEl.style.display === 'none' ? 'block' : 'none';
       };
 
