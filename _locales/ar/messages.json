@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "أغلق علامات التبويب حسب النطاق. شاهد المواقع التي تحتوي على أكثر علامات تبويب وأغلقها جميعًا بنقرة واحدة."
-  },
-  "thisWindow": {
-    "message": "هذه النافذة"
-  },
-  "allWindows": {
-    "message": "الكل"
-  },
-  "close": {
-    "message": "إغلاق"
-  },
-  "tab": {
-    "message": "علامة تبويب"
-  },
-  "tabs": {
-    "message": "علامات تبويب"
-  },
-  "noTabs": {
-    "message": "لا توجد علامات تبويب مفتوحة"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "أغلق علامات التبويب حسب النطاق. شاهد المواقع التي تحتوي على أكثر علامات تبويب وأغلقها جميعًا بنقرة واحدة." },
+  "thisWindow": { "message": "هذه النافذة" },
+  "allWindows": { "message": "الكل" },
+  "close": { "message": "إغلاق" },
+  "tab": { "message": "علامة تبويب" },
+  "tabs": { "message": "علامات تبويب" },
+  "noTabs": { "message": "لا توجد علامات تبويب مفتوحة" },
+  "search": { "message": "بحث..." },
+  "closeSelected": { "message": "إغلاق المحدد" },
+  "selectedCount": { "message": "{count} محدد" },
+  "current": { "message": "الحالي" },
+  "confirmCloseCurrent": { "message": "هذه علامة التبويب الحالية. هل أنت متأكد؟" },
+  "confirmCloseOnly": { "message": "هذه علامة التبويب الوحيدة. هل أنت متأكد؟" }
 }

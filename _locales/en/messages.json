@@ -22,5 +22,23 @@
   },
   "noTabs": {
     "message": "No open tabs"
+  },
+  "search": {
+    "message": "Search..."
+  },
+  "closeSelected": {
+    "message": "Close selected"
+  },
+  "selectedCount": {
+    "message": "{count} selected"
+  },
+  "current": {
+    "message": "current"
+  },
+  "confirmCloseCurrent": {
+    "message": "This is your current tab. Are you sure you want to close it?"
+  },
+  "confirmCloseOnly": {
+    "message": "This is the only tab. Are you sure?"
   }
 }

@@ -15,12 +15,30 @@
     "message": "Kapat"
   },
   "tab": {
-    "message": "tab"
+    "message": "sekme"
   },
   "tabs": {
-    "message": "tab"
+    "message": "sekme"
   },
   "noTabs": {
-    "message": "Açık tab yok"
+    "message": "Açık sekme yok"
+  },
+  "search": {
+    "message": "Ara..."
+  },
+  "closeSelected": {
+    "message": "Seçilenleri kapat"
+  },
+  "selectedCount": {
+    "message": "{count} seçili"
+  },
+  "current": {
+    "message": "mevcut"
+  },
+  "confirmCloseCurrent": {
+    "message": "Bu mevcut sekmeniz. Kapatmak istediğinize emin misiniz?"
+  },
+  "confirmCloseOnly": {
+    "message": "Bu tek sekme. Emin misiniz?"
   }
 }

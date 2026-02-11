@@ -10,16 +10,26 @@
   <div class="container">
     <div class="header">
       <h1>CloseMyTabs</h1>
-      <div class="toggle-container">
-        <span class="toggle-label" id="label-this"></span>
-        <label class="toggle">
-          <input type="checkbox" id="all-windows-toggle">
-          <span class="toggle-slider"></span>
-        </label>
-        <span class="toggle-label" id="label-all"></span>
+      <div class="header-controls">
+        <button id="theme-toggle" class="icon-btn" title="Toggle theme">◐</button>
+        <div class="toggle-container">
+          <span class="toggle-label" id="label-this"></span>
+          <label class="toggle">
+            <input type="checkbox" id="all-windows-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label" id="label-all"></span>
+        </div>
       </div>
     </div>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Search...">
+    </div>
     <div id="tab-list"></div>
+    <div id="selection-bar" class="selection-bar hidden">
+      <span id="selected-count"></span>
+      <button id="close-selected-btn" class="close-selected-btn"></button>
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>

@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Stäng flikar per domän. Se vilka webbplatser som har flest flikar och stäng alla med ett klick."
-  },
-  "thisWindow": {
-    "message": "Detta fönster"
-  },
-  "allWindows": {
-    "message": "Alla"
-  },
-  "close": {
-    "message": "Stäng"
-  },
-  "tab": {
-    "message": "flik"
-  },
-  "tabs": {
-    "message": "flikar"
-  },
-  "noTabs": {
-    "message": "Inga öppna flikar"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Stäng flikar per domän. Se vilka webbplatser som har flest flikar och stäng alla med ett klick." },
+  "thisWindow": { "message": "Detta fönster" },
+  "allWindows": { "message": "Alla" },
+  "close": { "message": "Stäng" },
+  "tab": { "message": "flik" },
+  "tabs": { "message": "flikar" },
+  "noTabs": { "message": "Inga öppna flikar" },
+  "search": { "message": "Sök..." },
+  "closeSelected": { "message": "Stäng valda" },
+  "selectedCount": { "message": "{count} valda" },
+  "current": { "message": "nuvarande" },
+  "confirmCloseCurrent": { "message": "Detta är din nuvarande flik. Är du säker?" },
+  "confirmCloseOnly": { "message": "Detta är den enda fliken. Är du säker?" }
 }

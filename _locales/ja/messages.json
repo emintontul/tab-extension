@@ -1,26 +1,16 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "ドメインごとにタブを閉じる。どのサイトのタブが多いか確認し、ワンクリックですべて閉じます。"
-  },
-  "thisWindow": {
-    "message": "このウィンドウ"
-  },
-  "allWindows": {
-    "message": "すべて"
-  },
-  "close": {
-    "message": "閉じる"
-  },
-  "tab": {
-    "message": "タブ"
-  },
-  "tabs": {
-    "message": "タブ"
-  },
-  "noTabs": {
-    "message": "開いているタブはありません"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "ドメインごとにタブを閉じる。どのサイトのタブが多いか確認し、ワンクリックですべて閉じます。" },
+  "thisWindow": { "message": "このウィンドウ" },
+  "allWindows": { "message": "すべて" },
+  "close": { "message": "閉じる" },
+  "tab": { "message": "タブ" },
+  "tabs": { "message": "タブ" },
+  "noTabs": { "message": "開いているタブはありません" },
+  "search": { "message": "検索..." },
+  "closeSelected": { "message": "選択を閉じる" },
+  "selectedCount": { "message": "{count}件選択" },
+  "current": { "message": "現在" },
+  "confirmCloseCurrent": { "message": "これは現在のタブです。閉じてもよろしいですか？" },
+  "confirmCloseOnly": { "message": "これは唯一のタブです。閉じてもよろしいですか？" }
 }
