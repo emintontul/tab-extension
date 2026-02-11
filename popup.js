@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('undo-title').textContent = i18n('recentlyClosed');
   document.getElementById('sessions-title').textContent = i18n('sessions');
   document.getElementById('session-name-input').placeholder = i18n('sessionName');
+  document.getElementById('label-duplicates').textContent = i18n('duplicates');
+  document.getElementById('label-copy').textContent = i18n('copy');
+  document.getElementById('label-undo').textContent = i18n('undo');
+  document.getElementById('label-sessions').textContent = i18n('sessions');
 
   const tabListEl = document.getElementById('tab-list');
   const toggle = document.getElementById('all-windows-toggle');

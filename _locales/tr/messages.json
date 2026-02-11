@@ -20,6 +20,7 @@
   "darkModeDesc": { "message": "Karanlık tema kullan" },
   "settingsSaved": { "message": "Ayarlar kaydedildi" },
   "duplicates": { "message": "Kopyalar" },
+  "copy": { "message": "Kopyala" },
   "duplicate": { "message": "kopya" },
   "noDuplicates": { "message": "Kopya sekme yok" },
   "copyUrls": { "message": "URL'leri kopyala" },
