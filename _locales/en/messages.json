@@ -1,44 +1,22 @@
 {
-  "extName": {
-    "message": "CloseMyTabs"
-  },
-  "extDescription": {
-    "message": "Batch close tabs by domain. See which sites have the most tabs open and close them all with one click."
-  },
-  "thisWindow": {
-    "message": "This window"
-  },
-  "allWindows": {
-    "message": "All"
-  },
-  "close": {
-    "message": "Close"
-  },
-  "tab": {
-    "message": "tab"
-  },
-  "tabs": {
-    "message": "tabs"
-  },
-  "noTabs": {
-    "message": "No open tabs"
-  },
-  "search": {
-    "message": "Search..."
-  },
-  "closeSelected": {
-    "message": "Close selected"
-  },
-  "selectedCount": {
-    "message": "{count} selected"
-  },
-  "current": {
-    "message": "current"
-  },
-  "confirmCloseCurrent": {
-    "message": "This is your current tab. Are you sure you want to close it?"
-  },
-  "confirmCloseOnly": {
-    "message": "This is the only tab. Are you sure?"
-  }
+  "extName": { "message": "CloseMyTabs" },
+  "extDescription": { "message": "Batch close tabs by domain. See which sites have the most tabs open and close them all with one click." },
+  "thisWindow": { "message": "This window" },
+  "allWindows": { "message": "All" },
+  "close": { "message": "Close" },
+  "tab": { "message": "tab" },
+  "tabs": { "message": "tabs" },
+  "noTabs": { "message": "No open tabs" },
+  "search": { "message": "Search..." },
+  "closeSelected": { "message": "Close selected" },
+  "selectedCount": { "message": "{count} selected" },
+  "current": { "message": "current" },
+  "confirmCloseCurrent": { "message": "This is your current tab. Are you sure you want to close it?" },
+  "confirmCloseOnly": { "message": "This is the only tab. Are you sure?" },
+  "settingsTitle": { "message": "Settings" },
+  "protectCurrentTitle": { "message": "Protect current tab" },
+  "protectCurrentDesc": { "message": "Never close the tab you're currently viewing" },
+  "darkModeTitle": { "message": "Dark mode" },
+  "darkModeDesc": { "message": "Use dark theme" },
+  "settingsSaved": { "message": "Settings saved" }
 }

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const toggle = document.getElementById('all-windows-toggle');
   const searchInput = document.getElementById('search-input');
   const themeToggle = document.getElementById('theme-toggle');
+  const settingsBtn = document.getElementById('settings-btn');
   const selectionBar = document.getElementById('selection-bar');
   const selectedCountEl = document.getElementById('selected-count');
   const closeSelectedBtn = document.getElementById('close-selected-btn');
@@ -21,15 +22,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const activeTabId = activeTab?.id;
 
+  // Load settings
+  const settings = await chrome.storage.sync.get({
+    protectCurrentTab: true,
+    darkMode: null
+  });
+
+  let protectCurrentTab = settings.protectCurrentTab;
+
   // Theme management
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (settings.darkMode === true || (settings.darkMode === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.body.classList.add('dark');
   }
 
-  themeToggle.addEventListener('click', () => {
+  themeToggle.addEventListener('click', async () => {
     document.body.classList.toggle('dark');
-    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    const isDark = document.body.classList.contains('dark');
+    await chrome.storage.sync.set({ darkMode: isDark });
+  });
+
+  // Settings button
+  settingsBtn.addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
   });
 
   // Track selected tabs
@@ -62,10 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   closeSelectedBtn.addEventListener('click', async () => {
     if (selectedTabs.size === 0) return;
 
-    // Always exclude current tab from closing
-    selectedTabs.delete(activeTabId);
-    const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
-    if (checkbox) checkbox.checked = false;
+    // Exclude current tab if protected
+    if (protectCurrentTab) {
+      selectedTabs.delete(activeTabId);
+      const checkbox = document.querySelector(`[data-tab-id="${activeTabId}"]`);
+      if (checkbox) checkbox.checked = false;
+    }
 
     if (selectedTabs.size === 0) {
       updateSelectionBar();
@@ -153,14 +169,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tabWord = data.tabs.length === 1 ? i18n('tab') : i18n('tabs');
       countEl.textContent = `${data.tabs.length} ${tabWord}`;
 
-      // Filter out current tab from closeable tabs
-      const closeableTabs = data.tabs.filter(t => t.id !== activeTabId);
+      // Filter out current tab from closeable tabs if protected
+      const closeableTabs = protectCurrentTab
+        ? data.tabs.filter(t => t.id !== activeTabId)
+        : data.tabs;
       const hasCurrentTab = data.tabs.some(t => t.id === activeTabId);
 
       const closeAllBtn = document.createElement('button');
       closeAllBtn.className = 'close-all-btn';
 
-      // If only current tab in group, hide close button
+      // If only current tab in group and protected, hide close button
       if (closeableTabs.length === 0) {
         closeAllBtn.style.display = 'none';
       } else {
@@ -170,16 +188,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       closeAllBtn.onclick = async (e) => {
         e.stopPropagation();
 
-        // Close all except current tab
         const tabIds = closeableTabs.map(t => t.id);
         if (tabIds.length === 0) return;
 
         await chrome.tabs.remove(tabIds);
 
-        // If current tab was in this group, keep the group with just current tab
-        if (hasCurrentTab) {
+        if (hasCurrentTab && protectCurrentTab) {
           countEl.textContent = `1 ${i18n('tab')}`;
-          // Remove closed tabs from expanded list
           expandedEl.querySelectorAll('.tab-item:not(.current-tab)').forEach(el => el.remove());
           closeAllBtn.style.display = 'none';
         } else {
@@ -203,6 +218,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         tabEl.className = 'tab-item';
 
         const isCurrentTab = tab.id === activeTabId;
+        const isProtected = isCurrentTab && protectCurrentTab;
+
         if (isCurrentTab) {
           tabEl.classList.add('current-tab');
         }
@@ -214,8 +231,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkbox.checked = selectedTabs.has(tab.id);
         checkbox.onclick = (e) => e.stopPropagation();
 
-        // Disable checkbox for current tab
-        if (isCurrentTab) {
+        // Disable checkbox for protected current tab
+        if (isProtected) {
           checkbox.disabled = true;
           checkbox.style.opacity = '0.3';
         }
@@ -242,14 +259,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         closeBtn.className = 'tab-close';
         closeBtn.textContent = '×';
 
-        // Hide close button for current tab
-        if (isCurrentTab) {
+        // Hide close button for protected current tab
+        if (isProtected) {
           closeBtn.style.visibility = 'hidden';
         }
 
         closeBtn.onclick = async (e) => {
           e.stopPropagation();
-          if (isCurrentTab) return; // Extra safety
+          if (isProtected) return;
 
           await chrome.tabs.remove(tab.id);
           selectedTabs.delete(tab.id);
@@ -261,8 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           } else {
             const newTabWord = remaining.length === 1 ? i18n('tab') : i18n('tabs');
             countEl.textContent = `${remaining.length} ${newTabWord}`;
-            // Hide group close button if only current tab remains
-            if (remaining.length === 1 && remaining[0].classList.contains('current-tab')) {
+            if (remaining.length === 1 && remaining[0].classList.contains('current-tab') && protectCurrentTab) {
               closeAllBtn.style.display = 'none';
             }
           }
